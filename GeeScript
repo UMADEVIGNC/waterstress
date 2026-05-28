@@ -1,0 +1,272 @@
+// =====================================================
+// TAMIL NADU DISTRICT-WISE MOISTURE STRESS TABLE
+// SENTINEL-1 BASED MOISTURE-STRESS PROXY
+// =====================================================
+
+// ---------------------------
+// 1) ADMIN BOUNDARIES
+// ---------------------------
+var countries = ee.FeatureCollection('FAO/GAUL/2015/level0');
+var states = ee.FeatureCollection('FAO/GAUL/2015/level1');
+var districtsAll = ee.FeatureCollection('FAO/GAUL/2015/level2');
+
+var india = countries.filter(ee.Filter.eq('ADM0_NAME', 'India'));
+var tamilNadu = states
+  .filter(ee.Filter.eq('ADM0_NAME', 'India'))
+  .filter(ee.Filter.eq('ADM1_NAME', 'Tamil Nadu'));
+
+var districts = districtsAll
+  .filter(ee.Filter.eq('ADM0_NAME', 'India'))
+  .filter(ee.Filter.eq('ADM1_NAME', 'Tamil Nadu'));
+
+Map.centerObject(tamilNadu, 7);
+Map.addLayer(tamilNadu, {color: 'red'}, 'Tamil Nadu boundary', true);
+Map.addLayer(districts, {color: 'blue'}, 'Tamil Nadu districts', false);
+
+// ---------------------------
+// 2) DATE SETTINGS
+// ---------------------------
+var currentStart = '2026-01-01';
+var currentEnd   = '2026-03-31';
+var baselineYears = [2021, 2022, 2023, 2024, 2025];
+
+// ---------------------------
+// 3) SENTINEL-1 COLLECTION
+// ---------------------------
+function getS1(startDate, endDate) {
+  return ee.ImageCollection('COPERNICUS/S1_GRD')
+    .filterBounds(tamilNadu)
+    .filterDate(startDate, endDate)
+    .filter(ee.Filter.eq('instrumentMode', 'IW'))
+    .filter(ee.Filter.listContains('transmitterReceiverPolarisation', 'VV'))
+    .filter(ee.Filter.listContains('transmitterReceiverPolarisation', 'VH'))
+    .select(['VV', 'VH']);
+}
+
+// ---------------------------
+// 4) SIMPLE DESPECKLE
+// ---------------------------
+function despeckle(img) {
+  var vv = img.select('VV').focal_median({
+    radius: 30,
+    units: 'meters'
+  });
+
+  var vh = img.select('VH').focal_median({
+    radius: 30,
+    units: 'meters'
+  });
+
+  return ee.Image.cat([vv, vh]).copyProperties(img, img.propertyNames());
+}
+
+// ---------------------------
+// 5) MOISTURE PROXY BAND
+// ---------------------------
+function addMoistureProxy(img) {
+  var vv_db = img.select('VV');
+  var vh_db = img.select('VH');
+
+  var vv_lin = ee.Image(10).pow(vv_db.divide(10));
+  var vh_lin = ee.Image(10).pow(vh_db.divide(10));
+
+  var ratio = vh_lin.divide(vv_lin).rename('vh_vv_ratio');
+
+  return img.addBands(ratio);
+}
+
+// ---------------------------
+// 6) CURRENT COMPOSITE
+// ---------------------------
+var currentCollection = getS1(currentStart, currentEnd)
+  .map(despeckle)
+  .map(addMoistureProxy);
+
+print('Current images count', currentCollection.size());
+
+var current = currentCollection.median().clip(tamilNadu);
+var currentRatio = current.select('vh_vv_ratio');
+
+// ---------------------------
+// 7) BASELINE COMPOSITES
+// ---------------------------
+function seasonalComposite(year) {
+  year = ee.Number(year);
+  var start = ee.Date.fromYMD(year, 1, 1);
+  var end   = ee.Date.fromYMD(year, 3, 31);
+
+  return getS1(start, end)
+    .map(despeckle)
+    .map(addMoistureProxy)
+    .median()
+    .select('vh_vv_ratio')
+    .clip(tamilNadu)
+    .set('year', year);
+}
+
+var baselineCollection = ee.ImageCollection.fromImages(
+  baselineYears.map(seasonalComposite)
+);
+
+print('Baseline seasonal composites', baselineCollection);
+
+var baselineMean = baselineCollection.mean().rename('baseline_mean');
+var baselineStd  = baselineCollection.reduce(ee.Reducer.stdDev())
+                                     .rename('baseline_std');
+
+// ---------------------------
+// 8) STRESS IMAGE
+// ---------------------------
+var rawStress = baselineMean.subtract(currentRatio).rename('raw_stress');
+var safeStd = baselineStd.max(0.001);
+var stressZ = rawStress.divide(safeStd).rename('stress_z');
+
+var stressSmooth = stressZ.focal_mean({
+  radius: 1000,
+  units: 'meters'
+}).rename('stress_smooth');
+
+var stressForStats = stressSmooth.clamp(-3, 3).clip(tamilNadu).rename('stress');
+var highStress = stressForStats.gt(1).rename('high_stress');
+
+// ---------------------------
+// 9) VISUALIZATION
+// ---------------------------
+var stressVis = {
+  min: -2,
+  max: 2,
+  palette: ['08306b', '41b6c4', 'ffffbf', 'fdae61', 'a50026']
+};
+
+Map.addLayer(stressForStats, stressVis, 'Tamil Nadu stress map', true);
+
+// ---------------------------
+// 10) DEBUG STATS
+// ---------------------------
+print('Current ratio stats', currentRatio.reduceRegion({
+  reducer: ee.Reducer.minMax(),
+  geometry: tamilNadu.geometry(),
+  scale: 3000,
+  maxPixels: 1e13
+}));
+
+print('Stress stats', stressForStats.reduceRegion({
+  reducer: ee.Reducer.minMax(),
+  geometry: tamilNadu.geometry(),
+  scale: 3000,
+  maxPixels: 1e13
+}));
+
+// ---------------------------
+// 11) DISTRICT MEAN + MAX
+// ---------------------------
+var districtStats = stressForStats.reduceRegions({
+  collection: districts,
+  reducer: ee.Reducer.mean().combine({
+    reducer2: ee.Reducer.max(),
+    sharedInputs: true
+  }),
+  scale: 3000,
+  tileScale: 4,
+  maxPixelsPerRegion: 1e8
+});
+
+// ---------------------------
+// 12) DISTRICT HIGH-STRESS FRACTION
+// ---------------------------
+var highStressStats = highStress.reduceRegions({
+  collection: districts,
+  reducer: ee.Reducer.mean(),
+  scale: 3000,
+  tileScale: 4,
+  maxPixelsPerRegion: 1e8
+});
+
+// ---------------------------
+// 13) JOIN TABLES
+// ---------------------------
+// IMPORTANT FIX:
+// use f.geometry() instead of null so SHP export works
+// also use shorter field names for shapefile safety
+var finalTable = districtStats.map(function(f) {
+  var code = f.get('ADM2_CODE');
+
+  var match = highStressStats
+    .filter(ee.Filter.eq('ADM2_CODE', code))
+    .first();
+
+  var frac = ee.Algorithms.If(match, match.get('mean'), null);
+
+  return ee.Feature(f.geometry(), {
+    'District': f.get('ADM2_NAME'),
+    'State': f.get('ADM1_NAME'),
+    'DistCode': f.get('ADM2_CODE'),
+    'MeanStrs': f.get('mean'),
+    'MaxStrs': f.get('max'),
+    'HighPct': ee.Algorithms.If(
+      frac,
+      ee.Number(frac).multiply(100),
+      null
+    )
+  });
+});
+
+// Remove empty rows and keep only real geometries
+var finalSorted = finalTable
+  .filter(ee.Filter.notNull(['MeanStrs', 'MaxStrs']))
+  .sort('HighPct', false);
+
+print('Tamil Nadu District Stress Table', finalSorted);
+
+// ---------------------------
+// 14) OPTIONAL DISTRICT CHOROPLETH
+// ---------------------------
+var districtMap = districts.map(function(d) {
+  var code = d.get('ADM2_CODE');
+
+  var row = finalSorted
+    .filter(ee.Filter.eq('DistCode', code))
+    .first();
+
+  return d.set({
+    'HighPct': ee.Algorithms.If(row, row.get('HighPct'), null)
+  });
+});
+
+var districtImage = districtMap.reduceToImage({
+  properties: ['HighPct'],
+  reducer: ee.Reducer.first()
+});
+
+Map.addLayer(
+  districtImage.clip(tamilNadu),
+  {
+    min: 0,
+    max: 100,
+    palette: ['08306b', '41b6c4', 'ffffbf', 'fdae61', 'a50026']
+  },
+  'Tamil Nadu district High Stress %',
+  false
+);
+
+// ---------------------------
+// 15) EXPORT CSV
+// ---------------------------
+Export.table.toDrive({
+  collection: finalSorted,
+  description: 'TamilNadu_District_Moisture_Stress_Table',
+  folder: 'GEE_exports',
+  fileNamePrefix: 'tamilnadu_district_moisture_stress_table',
+  fileFormat: 'CSV'
+});
+
+// ---------------------------
+// 16) EXPORT SHP
+// ---------------------------
+Export.table.toDrive({
+  collection: finalSorted,
+  description: 'TN_Stress_Map',
+  folder: 'GEE_exports',
+  fileNamePrefix: 'tn_stress_map',
+  fileFormat: 'SHP'
+});
