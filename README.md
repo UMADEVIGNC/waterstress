@@ -1,8 +1,10 @@
-# 🌱 District Level Water Stress Monitor using Satellite data – Edge Visualization
+# 🌱 District Level Water Stress Monitor using Satellite Data – Edge Visualization
 
 [![Platform](https://img.shields.io/badge/Platform-ESP32--C6-blue)](https://www.waveshare.com/wiki/ESP32-C6-Touch-LCD-1.69)
 [![Framework](https://img.shields.io/badge/Framework-Arduino-red)](https://www.arduino.cc/)
 [![UI](https://img.shields.io/badge/UI-LVGL-green)](https://lvgl.io/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![API](https://img.shields.io/badge/API-Render.com-purple)](https://render.com)
 
 A low-cost, battery-capable edge device that visualizes **satellite-derived soil moisture stress** at the district level. Built for the Waveshare ESP32-C6-Touch-LCD-1.69, this device fetches data from a cloud API (powered by Google Earth Engine + Sentinel-1 SAR) and displays stress metrics via an intuitive touchscreen interface.
 
@@ -46,22 +48,35 @@ This project is the **edge visualization component** of a larger framework that:
 
 ## 🚀 Getting Started
 
-### 1. Install Dependencies
+Follow these steps in order to set up the complete system from satellite processing to edge device visualization.
 
-Add these libraries via Arduino Library Manager:
+---
 
-| Library | Version | Purpose |
-|---------|---------|---------|
-| `lvgl` | ≥ 8.4.0 | GUI framework |
-| `GFX_Library_for_Arduino` | ≥ 1.6.0 | Display driver |
-| `OneButton` | ≥ 2.6.1 | Button handling |
-| `Arduino_GFX` | latest | SPI display support |
+### Phase 1: Cloud Infrastructure Setup
 
-### 2. Configure Wi-Fi & API
+#### 1.1 Google Earth Engine (GEE) – SAR Processing
 
-Edit the following lines in the code:
+1. Go to [Google Earth Engine Code Editor](https://code.earthengine.google.com/)
+2. Copy the provided GEE script into a new file
+3. Set your analysis years (baseline: 2021–2025, current: 2026)
+4. Run the script and verify the district-level stress table output
+5. Export the results as CSV/GeoJSON when satisfied
 
-```cpp
-const char* WIFI_SSID = "Your_SSID";
-const char* WIFI_PASS = "Your_Password";
-const char* STRESS_URL = "https://your-api.com/stress-compact";
+#### 1.2 Create GEE Service Account (for API access)
+
+| Step | Action |
+|------|--------|
+| 1 | Go to [Google Cloud Console](https://console.cloud.google.com/) |
+| 2 | Enable **Earth Engine API** for your project |
+| 3 | Create a **Service Account** with Earth Engine access |
+| 4 | Generate a **private key** in JSON format – download and save securely |
+| 5 | Note your **Project ID** and **Service Account email** |
+
+#### 1.3 Deploy Cloud API (Render.com or similar)
+
+**Required environment variables** in your hosting platform:
+
+```env
+GEE_SERVICE_ACCOUNT=your-service-account@project.iam.gserviceaccount.com
+GEE_PRIVATE_KEY_JSON={"type":"service_account","project_id":"..."}
+GEE_PROJECT_ID=your-project-id
