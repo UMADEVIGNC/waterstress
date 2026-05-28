@@ -11,9 +11,9 @@
 #include "TouchDrvCSTXXX.hpp"
 
 // ---------- WiFi + API ----------
-const char* WIFI_SSID = "Selva";
-const char* WIFI_PASS = "Bears@123";
-const char* STRESS_URL = "https://gee-esp-dashboard.onrender.com/stress-compact";
+const char* WIFI_SSID = "Your wifi SSID";
+const char* WIFI_PASS = "Your Wifi Pasword";
+const char* STRESS_URL = "Cloud url where you have uploaded the python code given in this project";
 
 // ---------- EEZ variable storage ----------
 static String waterStressText = "Press button to fetch";
