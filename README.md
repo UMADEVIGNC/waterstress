@@ -1,4 +1,4 @@
-# 🌱 Soil Moisture Stress Monitor – Edge Visualization
+# 🌱 District Level Water Stress Monitor using Satellite data – Edge Visualization
 
 [![Platform](https://img.shields.io/badge/Platform-ESP32--C6-blue)](https://www.waveshare.com/wiki/ESP32-C6-Touch-LCD-1.69)
 [![Framework](https://img.shields.io/badge/Framework-Arduino-red)](https://www.arduino.cc/)
