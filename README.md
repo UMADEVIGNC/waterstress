@@ -18,7 +18,7 @@
         <em>ESP32-C6 dashboard showing district-level water stress</em>
       </td>
       <td align="center">
-        <img src="images/TN_Water_Stress_Figure-removebg-preview.png"
+        <img src="images/TN_Water_Stress_Map"
              alt="Tamil Nadu Water Stress Map"
              width="320">
         <br>
