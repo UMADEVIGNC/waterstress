@@ -9,7 +9,7 @@
 <div align="center">
   <img src="images/ESP32_C6_WATER_STRESS_HOME_SCREEN2-removebg-preview.png" alt="ESP32-C6 Main Dashboard" width="400">
   <br>
-  <em>ESP32-C6-Touch-LCD-1.69 displaying district-level moisture stress</em>
+  <em>ESP32-C6-Touch-LCD-1.69 displaying district-level water stress</em>
 </div>
 
 ---
