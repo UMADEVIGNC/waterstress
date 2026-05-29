@@ -11,7 +11,8 @@
   <table>
     <tr>
       <td align="center">
-        <img src="images/ESP32_C6_WATER_STRESS_HOME_SCREEN2-removebg-preview.png"
+        <!-- <img src="images/ESP32_C6_WATER_STRESS_HOME_SCREEN2-removebg-preview.png" -->
+       <img src="images/TN_Water_Stress_Figure-removebg-preview.png"
              alt="ESP32-C6 Dashboard"
              width="320">
         <br>
