@@ -80,3 +80,12 @@ Follow these steps in order to set up the complete system from satellite process
 GEE_SERVICE_ACCOUNT=your-service-account@project.iam.gserviceaccount.com
 GEE_PRIVATE_KEY_JSON={"type":"service_account","project_id":"..."}
 GEE_PROJECT_ID=your-project-id
+
+### 2. Configure Wi-Fi & API
+
+Edit the following lines in the Arduino code:
+
+```cpp
+const char* WIFI_SSID = "Your_SSID";
+const char* WIFI_PASS = "Your_Password";
+const char* STRESS_URL = "https://your-api.com/stress-compact";
