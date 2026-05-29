@@ -46,7 +46,7 @@ This project is the **edge visualization component** of a larger framework that:
 | Main Dashboard | High Stress Analysis View |
 |:---:|:---:|
 | <img src="images/ESP32_C6_WATER_STRESS_HOME_SCREEN2-removebg-preview.png" width="250"> | <img src="images/ESP32_C6_WATER_STRESS_2ND_SCREEN-removebg-preview.png" width="250"> |
-| *District-wise stress list with color coding* | *Highest stress district with animated arc gauge* |
+| *District-wise stress Scroll with Chart* | *Highest stress district with animated arc gauge* |
 
 **Features:**
 - ✅ Full color 262K display
@@ -64,7 +64,7 @@ For battery-critical deployments, a simple OLED display can be used as a low-pow
 | Initial State | Press Button | Result Display 1 | Result Display 2 |
 |:---:|:---:|:---:|:---:|
 | <img src="images/OLED_WATER_STRESS_EMPTY-removebg-preview.png" width="120"> | <img src="images/OLED_WATER_STRESS_PRESS_BUTTON-removebg-preview.png" width="120"> | <img src="images/OLED_WATER_STRESS_DISPLAY_RESULT_1-removebg-preview.png" width="120"> | <img src="images/OLED_WATER_STRESS_DISPLAY_RESULT3-removebg-preview.png" width="120"> |
-| *Awaiting data* | *Fetching from API* | *District: Thoothukudi* | *Stress: 39.26%* |
+| *Awaiting data* | *Fetching from API* | *District: Stress Scrolling* | *Stress: 39.26%* |
 
 **OLED Features:**
 - ✅ Ultra-low power consumption (~10mA active, ~0.5mA sleep)
