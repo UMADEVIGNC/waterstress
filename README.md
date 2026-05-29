@@ -7,9 +7,27 @@
 [![API](https://img.shields.io/badge/API-Render.com-purple)](https://render.com)
 
 <div align="center">
-  <img src="images/ESP32_C6_WATER_STRESS_HOME_SCREEN2-removebg-preview.png" alt="ESP32-C6 Main Dashboard" width="400">
-  <br>
-  <em>ESP32-C6-Touch-LCD-1.69 displaying district-level water stress</em>
+
+  <table>
+    <tr>
+      <td align="center">
+        <img src="images/ESP32_C6_WATER_STRESS_HOME_SCREEN2-removebg-preview.png"
+             alt="ESP32-C6 Dashboard"
+             width="320">
+        <br>
+        <em>ESP32-C6 dashboard showing district-level water stress</em>
+      </td>
+
+      <td align="center">
+        <img src="images/TN_Water_Stress_Figure-removebg-preview.png"
+             alt="Tamil Nadu Water Stress Map"
+             width="320">
+        <br>
+        <em>Tamil Nadu district-wise water stress visualization</em>
+      </td>
+    </tr>
+  </table>
+
 </div>
 
 ---
