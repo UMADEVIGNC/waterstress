@@ -11,14 +11,12 @@
   <table>
     <tr>
       <td align="center">
-        <!-- <img src="images/ESP32_C6_WATER_STRESS_HOME_SCREEN2-removebg-preview.png" -->
-       <img src="images/TN_Water_Stress_Figure-removebg-preview.png"
-             alt="ESP32-C6 Dashboard"
-             width="320">
+        <img src="images/ESP32_C6_WATER_STRESS_HOME_SCREEN2-removebg-preview.png"
+              alt="ESP32-C6 Dashboard"
+              width="320">
         <br>
         <em>ESP32-C6 dashboard showing district-level water stress</em>
       </td>
-
       <td align="center">
         <img src="images/TN_Water_Stress_Figure-removebg-preview.png"
              alt="Tamil Nadu Water Stress Map"
