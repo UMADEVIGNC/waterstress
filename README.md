@@ -6,7 +6,11 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![API](https://img.shields.io/badge/API-Render.com-purple)](https://render.com)
 
-A low-cost, battery-capable edge device that visualizes **satellite-derived soil moisture stress** at the district level. Built for the Waveshare ESP32-C6-Touch-LCD-1.69, this device fetches data from a cloud API (powered by Google Earth Engine + Sentinel-1 SAR) and displays stress metrics via an intuitive touchscreen interface.
+<div align="center">
+  <img src="images/ESP32_C6_WATER_STRESS_HOME_SCREEN2-removebg-preview.png" alt="ESP32-C6 Main Dashboard" width="400">
+  <br>
+  <em>ESP32-C6-Touch-LCD-1.69 displaying district-level moisture stress</em>
+</div>
 
 ---
 
@@ -29,8 +33,59 @@ This project is the **edge visualization component** of a larger framework that:
 |-----------|---------------|
 | **Board** | Waveshare ESP32-C6-Touch-LCD-1.69 |
 | **Display** | 1.69" 240×280 ST7789 (touch-capacitive) |
+| **Alternative Display** | OLED (128×64, I2C) for low-power deployments |
 | **Connectivity** | Wi-Fi 6 (2.4 GHz) |
 | **Power** | USB-C or 3.7V Li-ion battery |
+
+---
+
+## 🖼️ Display Interface Gallery
+
+### Waveshare LCD Touch Display (Primary)
+
+| Main Dashboard | High Stress Analysis View |
+|:---:|:---:|
+| <img src="images/ESP32_C6_WATER_STRESS_HOME_SCREEN2-removebg-preview.png" width="250"> | <img src="images/ESP32_C6_WATER_STRESS_2ND_SCREEN-removebg-preview.png" width="250"> |
+| *District-wise stress list with color coding* | *Highest stress district with animated arc gauge* |
+
+**Features:**
+- ✅ Full color 262K display
+- ✅ Capacitive touch navigation
+- ✅ Swipe left to access high-stress view
+- ✅ Home button for quick return
+- ✅ Animated arc gauge for stress visualization
+
+---
+
+### OLED Display Alternative (Low-Power Option)
+
+For battery-critical deployments, a simple OLED display can be used as a low-power alternative.
+
+| Initial State | Press Button | Result Display 1 | Result Display 2 |
+|:---:|:---:|:---:|:---:|
+| <img src="images/OLED_WATER_STRESS_EMPTY-removebg-preview.png" width="120"> | <img src="images/OLED_WATER_STRESS_PRESS_BUTTON-removebg-preview.png" width="120"> | <img src="images/OLED_WATER_STRESS_DISPLAY_RESULT_1-removebg-preview.png" width="120"> | <img src="images/OLED_WATER_STRESS_DISPLAY_RESULT3-removebg-preview.png" width="120"> |
+| *Awaiting data* | *Fetching from API* | *District: Thoothukudi* | *Stress: 39.26%* |
+
+**OLED Features:**
+- ✅ Ultra-low power consumption (~10mA active, ~0.5mA sleep)
+- ✅ Simple numeric readout
+- ✅ I2C interface (minimal wiring)
+- ✅ Best for remote/solar-powered deployments
+
+---
+
+### Display Comparison Table
+
+| Feature | Waveshare LCD | OLED |
+|---------|---------------|------|
+| **Size** | 1.69" | 0.96" - 1.3" |
+| **Resolution** | 240×280 | 128×64 |
+| **Color** | 262K colors | Monochrome |
+| **Touch Screen** | ✅ Capacitive | ❌ |
+| **GUI Complexity** | Rich (charts, arcs, images) | Simple (text, basic shapes) |
+| **Power (Active)** | ~40-60 mA | ~10-15 mA |
+| **Power (Sleep)** | ~5 mA | ~0.5 mA |
+| **Best For** | Full-featured stations | Battery-critical remote deployment |
 
 ---
 
@@ -38,11 +93,12 @@ This project is the **edge visualization component** of a larger framework that:
 
 - ✅ Fetches **district-wise stress** data from cloud API
 - ✅ Displays **mean stress**, **max stress**, and **high-stress percentage**
-- ✅ Visualizes historical trends with **bar chart**
+- ✅ Visualizes historical trends with **bar chart** (Waveshare only)
 - ✅ Shows **highest stress district** with animated arc gauge
 - ✅ **Power management** – deep sleep, wake on PWR button
 - ✅ Touch navigation – swipe left for detailed view, home button to return
 - ✅ Offline-capable – retains last fetched data
+- ✅ **Dual display support** – Works with both Waveshare LCD and OLED
 
 ---
 
@@ -80,8 +136,6 @@ Follow these steps in order to set up the complete system from satellite process
 GEE_SERVICE_ACCOUNT=your-service-account@project.iam.gserviceaccount.com
 GEE_PRIVATE_KEY_JSON={"type":"service_account","project_id":"..."}
 GEE_PROJECT_ID=your-project-id
-
-### 2. Configure Wi-Fi & API
 
 Edit the following lines in the Arduino code:
 
