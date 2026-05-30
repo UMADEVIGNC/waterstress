@@ -92,7 +92,7 @@ For battery-critical deployments, a simple OLED display can be used as a low-pow
            width="120">
     </td>
     <td align="center">
-      <img src="images/TN Water Stress Splash Screen.png"
+      <img src="images/TN Water stress Splash Screen.png"
            alt="Splash Screen"
            width="120">
     </td>
