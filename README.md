@@ -91,32 +91,27 @@ For battery-critical deployments, a simple OLED display can be used as a low-pow
            alt="OLED Empty"
            width="120">
     </td>
-
     <td align="center">
       <img src="images/TN_Water_Stress_Splash_Screen.png"
            alt="Splash Screen"
            width="120">
     </td>
-
     <td align="center">
       <img src="images/OLED_WATER_STRESS_PRESS_BUTTON-removebg-preview.png"
            alt="Press Button"
            width="120">
     </td>
-
     <td align="center">
       <img src="images/OLED_WATER_STRESS_DISPLAY_RESULT_1-removebg-preview.png"
            alt="Result Display 1"
            width="120">
     </td>
-
     <td align="center">
       <img src="images/OLED_WATER_STRESS_DISPLAY_RESULT3-removebg-preview.png"
            alt="Result Display 2"
            width="120">
     </td>
   </tr>
-
   <tr>
     <td align="center"><em>Awaiting data</em></td>
     <td align="center"><em>Splash Screen</em></td>
