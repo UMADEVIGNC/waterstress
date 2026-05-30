@@ -117,7 +117,7 @@ For battery-critical deployments, a simple OLED display can be used as a low-pow
     <td align="center"><em>Splash Screen</em></td>
     <td align="center"><em>Fetching from API</em></td>
     <td align="center"><em>District: Stress Scrolling</em></td>
-    <td align="center"><em>Stress: 39.26%</em></td>
+    <td align="center"><em>Stress: Water Stress</em></td>
   </tr>
 </table>
 
