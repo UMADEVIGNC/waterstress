@@ -72,23 +72,65 @@ This project is the **edge visualization component** of a larger framework that:
 - ✅ Animated arc gauge for stress visualization
 
 ---
-
 ### OLED Display Alternative (Low-Power Option)
 
 For battery-critical deployments, a simple OLED display can be used as a low-power alternative.
 
-| Initial State | Splash Screen | Press Button | Result Display 1 | Result Display 2 |
-|:---:|:---:|:---:|:---:|
-| <img src="images/OLED_WATER_STRESS_EMPTY-removebg-preview.png" width="120"> | <img src="images/TN Water stress Splash Screen.png " width="120"> | <img src="images/OLED_WATER_STRESS_PRESS_BUTTON-removebg-preview.png" width="120"> | <img src="images/OLED_WATER_STRESS_DISPLAY_RESULT_1-removebg-preview.png" width="120"> | <img src="images/OLED_WATER_STRESS_DISPLAY_RESULT3-removebg-preview.png" width="120"> |
-| *Awaiting data* | *Splash Screen* | *Fetching from API* | *District: Stress Scrolling* | *Stress: 39.26%* |
+<table align="center">
+  <tr>
+    <th>Initial State</th>
+    <th>Splash Screen</th>
+    <th>Press Button</th>
+    <th>Result Display 1</th>
+    <th>Result Display 2</th>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <img src="images/OLED_WATER_STRESS_EMPTY-removebg-preview.png"
+           alt="OLED Empty"
+           width="120">
+    </td>
+
+    <td align="center">
+      <img src="images/TN_Water_Stress_Splash_Screen.png"
+           alt="Splash Screen"
+           width="120">
+    </td>
+
+    <td align="center">
+      <img src="images/OLED_WATER_STRESS_PRESS_BUTTON-removebg-preview.png"
+           alt="Press Button"
+           width="120">
+    </td>
+
+    <td align="center">
+      <img src="images/OLED_WATER_STRESS_DISPLAY_RESULT_1-removebg-preview.png"
+           alt="Result Display 1"
+           width="120">
+    </td>
+
+    <td align="center">
+      <img src="images/OLED_WATER_STRESS_DISPLAY_RESULT3-removebg-preview.png"
+           alt="Result Display 2"
+           width="120">
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center"><em>Awaiting data</em></td>
+    <td align="center"><em>Splash Screen</em></td>
+    <td align="center"><em>Fetching from API</em></td>
+    <td align="center"><em>District: Stress Scrolling</em></td>
+    <td align="center"><em>Stress: 39.26%</em></td>
+  </tr>
+</table>
 
 **OLED Features:**
 - ✅ Ultra-low power consumption (~10mA active, ~0.5mA sleep)
 - ✅ Simple numeric readout
 - ✅ I2C interface (minimal wiring)
 - ✅ Best for remote/solar-powered deployments
-
----
 
 ### Display Comparison Table
 
