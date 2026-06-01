@@ -59,11 +59,10 @@ This project is the **edge visualization component** of a larger framework that:
 
 ### Waveshare LCD Touch Display (Primary)
 
-| Main Dashboard | High Stress Analysis View |
-|:---:|:---:|
-| <img src="images/ESP32_C6_WATER_STRESS_HOME_SCREEN2-removebg-preview.png" width="250"> | <img src="images/ESP32_C6_WATER_STRESS_2ND_SCREEN-removebg-preview.png" width="250"> |
-| *District-wise stress Scroll with Chart* | *Highest stress district with animated arc gauge* | <img src="images/Tamil_Report_QR-removebg-preview.png" width="250"> |
-| *QR for Water Stress Report in Tamil* | *Highest stress district with animated arc gauge* |
+| Main Dashboard | High Stress Analysis View | Tamil Report QR |
+|:---:|:---:|:---:|
+| <img src="images/ESP32_C6_WATER_STRESS_HOME_SCREEN2-removebg-preview.png" width="250"> | <img src="images/ESP32_C6_WATER_STRESS_2ND_SCREEN-removebg-preview.png" width="250"> | <img src="images/Tamil_Report_QR-removebg-preview.png" width="250"> |
+| *District-wise stress scroll with chart* | *Highest stress district with animated arc gauge* | *QR for Water Stress Report in Tamil* |
 
 **Features:**
 - ✅ Full color 262K display
