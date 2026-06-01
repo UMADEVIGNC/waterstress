@@ -62,7 +62,8 @@ This project is the **edge visualization component** of a larger framework that:
 | Main Dashboard | High Stress Analysis View |
 |:---:|:---:|
 | <img src="images/ESP32_C6_WATER_STRESS_HOME_SCREEN2-removebg-preview.png" width="250"> | <img src="images/ESP32_C6_WATER_STRESS_2ND_SCREEN-removebg-preview.png" width="250"> |
-| *District-wise stress Scroll with Chart* | *Highest stress district with animated arc gauge* |
+| *District-wise stress Scroll with Chart* | *Highest stress district with animated arc gauge* | <img src="images/Tamil_Report_QR-removebg-preview.png" width="250"> |
+| *QR for Water Stress Report in Tamil* | *Highest stress district with animated arc gauge* |
 
 **Features:**
 - ✅ Full color 262K display
