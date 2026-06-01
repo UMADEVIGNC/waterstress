@@ -64,11 +64,12 @@ This project is the **edge visualization component** of a larger framework that:
 | *District-wise stress scroll with chart* | *Highest stress district with animated arc gauge* | *QR for Water Stress Report in Tamil* |
 
 **Features:**
-- ✅ Full color 262K display
-- ✅ Capacitive touch navigation
-- ✅ Swipe left to access high-stress view
-- ✅ Home button for quick return
-- ✅ Animated arc gauge for stress visualization
+-  Full color 262K display
+-  Capacitive touch navigation
+-  Swipe left to access high-stress view
+-  Home button for quick return
+-  Animated arc gauge for stress visualization
+-  QR for Regional Language Report
 
 ---
 ### OLED Display Alternative (Low-Power Option)
@@ -121,10 +122,10 @@ For battery-critical deployments, a simple OLED display can be used as a low-pow
 </table>
 
 **OLED Features:**
-- ✅ Ultra-low power consumption (~10mA active, ~0.5mA sleep)
-- ✅ Simple numeric readout
-- ✅ I2C interface (minimal wiring)
-- ✅ Best for remote/solar-powered deployments
+-  Ultra-low power consumption (~10mA active, ~0.5mA sleep)
+-  Simple numeric readout
+-  I2C interface (minimal wiring)
+-  Best for remote/solar-powered deployments
 
 ### Display Comparison Table
 
@@ -133,7 +134,7 @@ For battery-critical deployments, a simple OLED display can be used as a low-pow
 | **Size** | 1.69" | 0.96" - 1.3" |
 | **Resolution** | 240×280 | 128×64 |
 | **Color** | 262K colors | Monochrome |
-| **Touch Screen** | ✅ Capacitive | ❌ |
+| **Touch Screen** |  Capacitive |  |
 | **GUI Complexity** | Rich (charts, arcs, images) | Simple (text, basic shapes) |
 | **Power (Active)** | ~40-60 mA | ~10-15 mA |
 | **Power (Sleep)** | ~5 mA | ~0.5 mA |
@@ -141,20 +142,20 @@ For battery-critical deployments, a simple OLED display can be used as a low-pow
 
 ---
 
-## 📦 Features
+##  Features
 
-- ✅ Fetches **district-wise stress** data from cloud API
-- ✅ Displays **mean stress**, **max stress**, and **high-stress percentage**
-- ✅ Visualizes historical trends with **bar chart** (Waveshare only)
-- ✅ Shows **highest stress district** with animated arc gauge
-- ✅ **Power management** – deep sleep, wake on PWR button
-- ✅ Touch navigation – swipe left for detailed view, home button to return
-- ✅ Offline-capable – retains last fetched data
-- ✅ **Dual display support** – Works with both Waveshare LCD and OLED
+-  Fetches **district-wise stress** data from cloud API
+-  Displays **mean stress**, **max stress**, and **high-stress percentage**
+-  Visualizes historical trends with **bar chart** (Waveshare only)
+-  Shows **highest stress district** with animated arc gauge
+-  **Power management** – deep sleep, wake on PWR button
+-  Touch navigation – swipe left for detailed view, home button to return
+-  Offline-capable – retains last fetched data
+-  **Dual display support** – Works with both Waveshare LCD and OLED
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 Follow these steps in order to set up the complete system from satellite processing to edge device visualization.
 
