@@ -60,7 +60,7 @@ This project is the **edge visualization component** of a larger framework that:
 
 | Main Dashboard | High Stress Analysis View | Highest Stress District |
 |:---:|:---:|:---:|
-| <img src="images/ESP32_C6_WATER_STRESS_HOME_SCREEN2-removebg-preview.png" width="250"> | <img src="images//ESPC6_Highest_Water_stress-removebg-preview.png" width="250"> | <img src="images/Tamil_Report_QR-removebg-preview.png "width="250"> |
+| <img src="images/ESP32_C6_WATER_STRESS_HOME_SCREEN2-removebg-preview.png" width="250"> | <img src="images//ESPC6_Highest_Water_stress-removebg-preview.png" width="250"> | <img src="images/Tamil_Report_QR-removebg-preview.png" width="250"> |
 | *District-wise stress scroll with chart* | *Highest stress district with animated arc gauge* | *Top stressed district summary view* |
 
 **Features:**
