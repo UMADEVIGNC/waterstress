@@ -174,8 +174,8 @@ void create_screen_high_stress_screen() {
                     // highArc
                     lv_obj_t *obj = lv_arc_create(parent_obj);
                     objects.high_arc = obj;
-                    lv_obj_set_pos(obj, 9, 85);
-                    lv_obj_set_size(obj, 155, 148);
+                    lv_obj_set_pos(obj, 3, 69);
+                    lv_obj_set_size(obj, 161, 152);
                     lv_arc_set_value(obj, 25);
                     lv_obj_remove_flag(obj, LV_OBJ_FLAG_CLICKABLE|LV_OBJ_FLAG_CLICK_FOCUSABLE|LV_OBJ_FLAG_PRESS_LOCK|LV_OBJ_FLAG_SCROLL_ELASTIC|LV_OBJ_FLAG_SCROLL_MOMENTUM|LV_OBJ_FLAG_SCROLL_WITH_ARROW|LV_OBJ_FLAG_SNAPPABLE);
                     lv_obj_set_style_bg_image_src(obj, &img_watericon, LV_PART_KNOB | LV_STATE_DEFAULT);
