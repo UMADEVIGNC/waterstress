@@ -196,3 +196,7 @@ Edit the following lines in the Arduino code:
 const char* WIFI_SSID = "Your_SSID";
 const char* WIFI_PASS = "Your_Password";
 const char* STRESS_URL = "https://your-api.com/stress-compact";
+=========================================================================
+If using the 'TNWaterStressDisplay_withQR_3_arcs' code, for the first time,
+1.Connect to "WaterStress_Config" WiFi
+2.Configure your home WiFi at http://192.168.4.1
