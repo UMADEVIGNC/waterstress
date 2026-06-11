@@ -239,10 +239,8 @@
     <script type="importmap">
         {
             "imports": {
-                "esptool-js": "https://unpkg.com/esptool-js@0.5.0/lib/index.js",
-                "pako": "https://unpkg.com/pako@2.1.0/dist/pako.esm.js",
-                "buffer/": "https://unpkg.com/buffer@6.0.3/",
-                "buffer": "https://unpkg.com/buffer@6.0.3/index.js"
+                "esptool-js": "https://cdn.jsdelivr.net/npm/esptool-js@0.5.0/lib/index.js",
+                "pako": "https://cdn.jsdelivr.net/npm/pako@2.0.4/dist/pako.esm.js"
             }
         }
     </script>
@@ -314,7 +312,7 @@
                 // Read chip info
                 addStatus('Detecting chip...');
                 const chip = await espLoader.readChip();
-                addStatus(`✓ Chip detected: ${chip.model} (${chip.mac})`, 'success');
+                addStatus(`✓ Chip detected: ${chip.model}`, 'success');
                 
                 // Download firmware
                 addStatus(`Downloading firmware from server...`);
