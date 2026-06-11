@@ -236,17 +236,12 @@
         </div>
     </div>
     
-    <script type="importmap">
-        {
-            "imports": {
-                "esptool-js": "https://cdn.jsdelivr.net/npm/esptool-js@0.5.0/lib/index.js",
-                "pako": "https://cdn.jsdelivr.net/npm/pako@2.0.4/dist/pako.esm.js"
-            }
-        }
-    </script>
-    
     <script type="module">
-        import { ESPLoader, Transport } from 'esptool-js';
+        // Import using CDN with correct paths
+        import ESPLoaderModule from 'https://unpkg.com/esptool-js@0.5.0/lib/index.js';
+        
+        // Extract ESPLoader and Transport from module
+        const { ESPLoader, Transport } = ESPLoaderModule;
         
         // Configuration
         const FIRMWARE_URL = './firmware.bin';
@@ -311,8 +306,9 @@
                 
                 // Read chip info
                 addStatus('Detecting chip...');
-                const chip = await espLoader.readChip();
-                addStatus(`✓ Chip detected: ${chip.model}`, 'success');
+                await espLoader.main();
+                const chip = await espLoader.getChip();
+                addStatus(`✓ Chip detected: ${chip}`, 'success');
                 
                 // Download firmware
                 addStatus(`Downloading firmware from server...`);
@@ -324,8 +320,8 @@
                 addStatus(`✓ Firmware downloaded: ${(firmwareData.byteLength / 1024).toFixed(1)} KB`, 'success');
                 
                 // Prepare for flashing
-                addStatus('Preparing to flash...');
-                updateProgress(5, 'Erasing flash memory...');
+                addStatus('Erasing flash memory...');
+                updateProgress(5, 'Erasing flash...');
                 
                 // Flash the firmware
                 await espLoader.flash({
@@ -339,7 +335,7 @@
                     eraseAll: true,
                     compress: true
                 }, (progress) => {
-                    const percent = Math.round(progress * 100);
+                    const percent = 5 + Math.round(progress * 95);
                     updateProgress(percent, `Flashing: ${percent}%`);
                 });
                 
@@ -348,7 +344,7 @@
                 
                 // Reset the device
                 addStatus('Resetting device...');
-                await espLoader.reset();
+                await espLoader.hardReset();
                 addStatus('✅ Device reset complete!', 'success');
                 addStatus('🎉 Installation complete! Your Water Stress Monitor is now ready.', 'success');
                 
