@@ -1,390 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Water Stress Monitor - Web Flasher</title>
+    <script type="module" src="https://unpkg.com/esp-web-tools@9.0.2/dist/web/install-button.js?module"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        /* Your styling */
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
+            margin: 0;
             padding: 20px;
         }
-        
         .container {
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            max-width: 600px;
-            width: 100%;
-            overflow: hidden;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
             padding: 30px;
+            max-width: 500px;
             text-align: center;
         }
-        
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-        
-        .header p {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-        
-        .content {
-            padding: 30px;
-        }
-        
-        .step {
-            margin-bottom: 30px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
-        }
-        
-        .step h3 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-        
-        .step-number {
-            display: inline-block;
-            width: 30px;
-            height: 30px;
-            background: #667eea;
-            color: white;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 30px;
-            margin-right: 10px;
-            font-size: 16px;
-            font-weight: bold;
-        }
-        
-        button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-            margin: 5px;
-            width: 100%;
-        }
-        
-        button:hover {
-            transform: translateY(-2px);
-        }
-        
-        button:active {
-            transform: translateY(0);
-        }
-        
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .status {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 10px;
-            background: #f5f5f5;
-            font-family: monospace;
-            font-size: 12px;
-            max-height: 250px;
-            overflow-y: auto;
-        }
-        
-        .status-line {
-            padding: 5px;
-            border-bottom: 1px solid #e0e0e0;
-            font-size: 11px;
-            word-wrap: break-word;
-        }
-        
-        .status-line.error {
-            color: #ef4444;
-        }
-        
-        .status-line.success {
-            color: #10b981;
-        }
-        
-        .status-line.info {
-            color: #3b82f6;
-        }
-        
-        .progress-bar {
-            width: 100%;
-            height: 30px;
-            background: #e0e0e0;
-            border-radius: 15px;
-            overflow: hidden;
-            margin: 15px 0;
-            display: none;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            width: 0%;
-            transition: width 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 12px;
-            font-weight: bold;
-        }
-        
-        .info-box {
-            background: #e0f2fe;
-            border-left: 4px solid #0284c7;
-            padding: 15px;
+        esp-web-install-button {
             margin: 20px 0;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-        
-        .warning-box {
-            background: #fef3c7;
-            border-left: 4px solid #f59e0b;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        @media (max-width: 600px) {
-            .container {
-                margin: 10px;
-            }
-            
-            .content {
-                padding: 20px;
-            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>💧 Water Stress Monitor</h1>
-            <p>In-Browser Firmware Flasher</p>
-        </div>
+        <h1>💧 Water Stress Monitor</h1>
+        <p>Click the button below to install the firmware</p>
         
-        <div class="content">
-            <div class="step">
-                <h3><span class="step-number">1</span> Connect Your Device</h3>
-                <p>Connect your ESP32-C6 board to your computer using a USB cable.</p>
-                <div class="info-box">
-                    💡 <strong>Tip:</strong> Use a data-capable USB cable. Make sure no other software (Arduino IDE, etc.) is using the COM port.
-                </div>
-            </div>
-            
-            <div class="step">
-                <h3><span class="step-number">2</span> Flash Firmware</h3>
-                <button id="flashBtn">📡 Install Water Stress Monitor</button>
-                <div class="progress-bar" id="progressBar">
-                    <div class="progress-fill" id="progressFill">0%</div>
-                </div>
-                <div class="warning-box">
-                    ⚠️ <strong>Important:</strong> Do not disconnect the device or close the browser during flashing. Takes about 45-60 seconds.
-                </div>
-            </div>
-            
-            <div class="status" id="status">
-                <div class="status-line info">Ready to flash. Click "Install" to begin.</div>
-            </div>
-            
-            <div class="info-box">
-                <strong>🎯 After flashing:</strong><br>
-                1. Device will restart automatically<br>
-                2. Look for WiFi network: <strong>"WaterStress_Config"</strong><br>
-                3. Password: <strong>12345678</strong><br>
-                4. Open browser to <strong>http://192.168.4.1</strong><br>
-                5. Configure your WiFi credentials
-            </div>
+        <esp-web-install-button
+            manifest="./manifest.json"
+        ></esp-web-install-button>
+        
+        <div class="info-box">
+            <strong>After flashing:</strong><br>
+            1. Connect to "WaterStress_Config" WiFi<br>
+            2. Visit http://192.168.4.1<br>
+            3. Configure your WiFi
         </div>
     </div>
-    
-    <script type="module">
-        // Import using CDN with correct paths
-        import ESPLoaderModule from 'https://unpkg.com/esptool-js@0.5.0/lib/index.js';
-        
-        // Extract ESPLoader and Transport from module
-        const { ESPLoader, Transport } = ESPLoaderModule;
-        
-        // Configuration
-        const FIRMWARE_URL = './firmware.bin';
-        
-        let device = null;
-        let transport = null;
-        let espLoader = null;
-        let isFlashing = false;
-        
-        const flashBtn = document.getElementById('flashBtn');
-        const statusDiv = document.getElementById('status');
-        const progressBar = document.getElementById('progressBar');
-        const progressFill = document.getElementById('progressFill');
-        
-        function addStatus(message, type = 'info') {
-            const statusLine = document.createElement('div');
-            statusLine.className = `status-line ${type}`;
-            statusLine.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
-            statusDiv.appendChild(statusLine);
-            statusDiv.scrollTop = statusDiv.scrollHeight;
-            console.log(message);
-        }
-        
-        function updateProgress(percent, message = '') {
-            const p = Math.min(100, Math.max(0, percent));
-            progressFill.style.width = `${p}%`;
-            progressFill.textContent = `${p}%`;
-            if (message) {
-                addStatus(message);
-            }
-        }
-        
-        flashBtn.addEventListener('click', async () => {
-            if (isFlashing) {
-                addStatus('Flash already in progress...', 'warning');
-                return;
-            }
-            
-            isFlashing = true;
-            flashBtn.disabled = true;
-            flashBtn.textContent = '⏳ Flashing...';
-            progressBar.style.display = 'block';
-            updateProgress(0, 'Starting firmware flash...');
-            
-            try {
-                // Request serial port
-                addStatus('Requesting serial port access. Please select the correct port.', 'info');
-                device = await navigator.serial.requestPort();
-                addStatus('Port selected successfully', 'success');
-                
-                // Open connection
-                await device.open({ baudRate: 115200 });
-                addStatus('Serial port opened', 'success');
-                
-                // Create transport
-                transport = new Transport(device);
-                espLoader = new ESPLoader({
-                    transport,
-                    baudRate: 115200,
-                    enableTracing: false
-                });
-                
-                // Read chip info
-                addStatus('Detecting chip...');
-                await espLoader.main();
-                const chip = await espLoader.getChip();
-                addStatus(`✓ Chip detected: ${chip}`, 'success');
-                
-                // Download firmware
-                addStatus(`Downloading firmware from server...`);
-                const response = await fetch(FIRMWARE_URL);
-                if (!response.ok) {
-                    throw new Error(`Failed to download firmware: HTTP ${response.status}`);
-                }
-                const firmwareData = await response.arrayBuffer();
-                addStatus(`✓ Firmware downloaded: ${(firmwareData.byteLength / 1024).toFixed(1)} KB`, 'success');
-                
-                // Prepare for flashing
-                addStatus('Erasing flash memory...');
-                updateProgress(5, 'Erasing flash...');
-                
-                // Flash the firmware
-                await espLoader.flash({
-                    fileArray: [
-                        {
-                            data: new Uint8Array(firmwareData),
-                            address: 0x0
-                        }
-                    ],
-                    flashSize: 'keep',
-                    eraseAll: true,
-                    compress: true
-                }, (progress) => {
-                    const percent = 5 + Math.round(progress * 95);
-                    updateProgress(percent, `Flashing: ${percent}%`);
-                });
-                
-                updateProgress(100, 'Flash complete!');
-                addStatus('✅ Firmware flashed successfully!', 'success');
-                
-                // Reset the device
-                addStatus('Resetting device...');
-                await espLoader.hardReset();
-                addStatus('✅ Device reset complete!', 'success');
-                addStatus('🎉 Installation complete! Your Water Stress Monitor is now ready.', 'success');
-                
-            } catch (error) {
-                addStatus(`❌ Flashing failed: ${error.message}`, 'error');
-                console.error(error);
-                updateProgress(0, 'Flash failed');
-            } finally {
-                // Clean up
-                if (transport) {
-                    try {
-                        await transport.disconnect();
-                    } catch (e) {
-                        // Ignore disconnect errors
-                    }
-                }
-                isFlashing = false;
-                flashBtn.disabled = false;
-                flashBtn.textContent = '📡 Install Water Stress Monitor';
-            }
-        });
-        
-        // Check if WebSerial is supported
-        if (!('serial' in navigator)) {
-            addStatus('❌ WebSerial is not supported in this browser. Please use Chrome or Edge on desktop.', 'error');
-            flashBtn.disabled = true;
-        } else {
-            addStatus('✓ WebSerial supported. Ready to flash.', 'success');
-        }
-        
-        // Handle page unload to close connection
-        window.addEventListener('beforeunload', async () => {
-            if (transport) {
-                try {
-                    await transport.disconnect();
-                } catch (e) {
-                    // Ignore errors on unload
-                }
-            }
-        });
-    </script>
 </body>
 </html>
