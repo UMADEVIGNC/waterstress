@@ -5,6 +5,7 @@
 [![UI](https://img.shields.io/badge/UI-LVGL-green)](https://lvgl.io/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![API](https://img.shields.io/badge/API-Render.com-purple)](https://render.com)
+[![Install Web Flasher](https://img.shields.io/badge/Web-Flasher-blue?style=for-the-badge&logo=espressif)](https://umadevignc.github.io/waterstress/)
 
 <div align="center">
 
