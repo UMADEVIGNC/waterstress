@@ -176,15 +176,6 @@
             font-size: 14px;
         }
         
-        select {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            margin: 10px 0;
-        }
-        
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -230,29 +221,23 @@
                 <h3><span class="step-number">1</span> Connect Your Device</h3>
                 <p>Connect your Waveshare ESP32-C6 board to your computer using a USB cable.</p>
                 <div class="info-box">
-                    💡 <strong>Tip:</strong> Use a data-capable USB cable (not just charging cable). Make sure no other software (Arduino IDE, Cura, etc.) is using the COM port.
+                    💡 <strong>Tip:</strong> Use a data-capable USB cable. Make sure no other software is using the COM port.
                 </div>
             </div>
             
             <div class="step">
-                <h3><span class="step-number">2</span> Select Board & Connect</h3>
-                <button id="connectBtn">🔌 Connect & Select Port</button>
-                <div id="deviceInfo" style="margin-top: 10px; font-size: 12px; color: #666;"></div>
-            </div>
-            
-            <div class="step">
-                <h3><span class="step-number">3</span> Flash Firmware</h3>
-                <button id="flashBtn" disabled>📡 Install Water Stress Monitor</button>
+                <h3><span class="step-number">2</span> Connect & Flash</h3>
+                <button id="flashBtn">📡 Install Water Stress Monitor</button>
                 <div class="progress-bar" id="progressBar">
                     <div class="progress-fill" id="progressFill">0%</div>
                 </div>
                 <div class="warning-box">
-                    ⚠️ <strong>Important:</strong> Do not disconnect the device or close the browser during flashing. The process takes about 45-60 seconds.
+                    ⚠️ <strong>Important:</strong> Do not disconnect during flashing. Takes about 45-60 seconds.
                 </div>
             </div>
             
             <div class="status" id="status">
-                <div class="status-line info">Ready to flash. Click "Connect" to begin.</div>
+                <div class="status-line info">Ready to flash. Click "Install" to begin.</div>
             </div>
             
             <div class="info-box">
@@ -269,31 +254,27 @@
     <script type="importmap">
         {
             "imports": {
-                "esptool-js": "https://unpkg.com/esptool-js@0.5.0/lib/index.js"
+                "esptool-js": "https://unpkg.com/esptool-js@0.5.0/lib/index.js",
+                "pako": "https://unpkg.com/pako@2.1.0/dist/pako.esm.js"
             }
         }
     </script>
     
     <script type="module">
-        import { ESPLoader, Transport, FlashOptions } from 'esptool-js';
+        import { ESPLoader, Transport } from 'esptool-js';
         
-        // Configuration
-        const FIRMWARE_URL = 'firmware.bin'; // Update with your actual firmware URL
-        const CHIP_FAMILY = 'esp32c6'; // For Waveshare ESP32-C6
+        // Configuration - using relative path
+        const FIRMWARE_URL = './firmware.bin';
         
         let device = null;
         let transport = null;
         let espLoader = null;
         
-        // DOM elements
-        const connectBtn = document.getElementById('connectBtn');
         const flashBtn = document.getElementById('flashBtn');
         const statusDiv = document.getElementById('status');
         const progressBar = document.getElementById('progressBar');
         const progressFill = document.getElementById('progressFill');
-        const deviceInfo = document.getElementById('deviceInfo');
         
-        // Helper function to add status messages
         function addStatus(message, type = 'info') {
             const statusLine = document.createElement('div');
             statusLine.className = `status-line ${type}`;
@@ -303,34 +284,27 @@
             console.log(message);
         }
         
-        // Helper function to clear status
-        function clearStatus() {
-            statusDiv.innerHTML = '';
-        }
-        
-        // Update progress
-        function updateProgress(percent, message = '') {
+        function updateProgress(percent) {
             const p = Math.min(100, Math.max(0, percent));
             progressFill.style.width = `${p}%`;
             progressFill.textContent = `${p}%`;
-            if (message) {
-                addStatus(message);
-            }
         }
         
-        // Connect to device
-        connectBtn.addEventListener('click', async () => {
+        flashBtn.addEventListener('click', async () => {
             try {
-                clearStatus();
-                addStatus('Requesting serial port...');
+                flashBtn.disabled = true;
+                flashBtn.textContent = 'Connecting...';
+                progressBar.style.display = 'block';
+                updateProgress(0);
+                addStatus('Starting firmware flash...');
                 
-                // Request port from user
+                // Request serial port
+                addStatus('Requesting serial port access...');
                 device = await navigator.serial.requestPort();
-                addStatus(`Selected port: ${device.info.usbProductId || 'Unknown'}`);
                 
                 // Open connection
                 await device.open({ baudRate: 115200 });
-                addStatus('Serial port opened successfully');
+                addStatus('Serial port opened');
                 
                 // Create transport
                 transport = new Transport(device);
@@ -341,128 +315,66 @@
                 });
                 
                 // Read chip info
-                addStatus('Reading chip information...');
+                addStatus('Detecting chip...');
                 const chip = await espLoader.readChip();
-                addStatus(`Chip detected: ${chip.model} (${chip.magicValue})`, 'success');
-                deviceInfo.innerHTML = `✅ Connected: ${chip.model}<br>MAC: ${chip.mac}`;
+                addStatus(`✓ Chip detected: ${chip.model}`, 'success');
                 
-                // Check if chip matches expected
-                if (!chip.model.toLowerCase().includes('c6')) {
-                    addStatus(`Warning: Expected ESP32-C6 but got ${chip.model}. Flashing may fail.`, 'error');
-                } else {
-                    addStatus('Correct chip detected! Ready to flash.', 'success');
-                }
-                
-                // Enable flash button
-                flashBtn.disabled = false;
-                connectBtn.disabled = true;
-                connectBtn.textContent = '✓ Connected';
-                
-            } catch (error) {
-                addStatus(`Connection failed: ${error.message}`, 'error');
-                console.error(error);
-                device = null;
-                transport = null;
-                espLoader = null;
-                flashBtn.disabled = true;
-                connectBtn.disabled = false;
-                connectBtn.textContent = '🔌 Connect & Select Port';
-            }
-        });
-        
-        // Flash firmware
-        flashBtn.addEventListener('click', async () => {
-            if (!espLoader) {
-                addStatus('No device connected. Please connect first.', 'error');
-                return;
-            }
-            
-            try {
-                flashBtn.disabled = true;
-                connectBtn.disabled = true;
-                progressBar.style.display = 'block';
-                updateProgress(0, 'Starting firmware flash...');
-                
-                // Fetch firmware binary
-                addStatus(`Downloading firmware from ${FIRMWARE_URL}...`);
+                // Download firmware
+                addStatus(`Downloading firmware...`);
                 const response = await fetch(FIRMWARE_URL);
-                if (!response.ok) {
-                    throw new Error(`Failed to download firmware: ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`Failed to download: ${response.status}`);
                 const firmwareData = await response.arrayBuffer();
-                addStatus(`Firmware downloaded: ${firmwareData.byteLength} bytes`, 'success');
+                addStatus(`✓ Firmware downloaded: ${firmwareData.byteLength} bytes`, 'success');
                 
-                // Prepare flash options
-                const flashOptions = {
-                    fileArray: [
-                        {
-                            data: new Uint8Array(firmwareData),
-                            address: 0x0
-                        }
-                    ],
+                // Flash firmware
+                addStatus('Erasing and flashing...');
+                updateProgress(10);
+                
+                await espLoader.flash({
+                    fileArray: [{
+                        data: new Uint8Array(firmwareData),
+                        address: 0x0
+                    }],
                     flashSize: 'keep',
                     eraseAll: true,
                     compress: true
-                };
-                
-                // Start flashing with progress callback
-                addStatus('Erasing flash memory...');
-                updateProgress(10, 'Erasing flash...');
-                
-                await espLoader.flash(flashOptions, (progress) => {
-                    const percent = Math.round(progress * 100);
-                    updateProgress(percent, `Flashing: ${percent}%`);
+                }, (progress) => {
+                    const percent = 10 + Math.round(progress * 90);
+                    updateProgress(percent);
+                    addStatus(`Flashing: ${percent}%`);
                 });
                 
-                updateProgress(100, 'Flash complete!');
-                addStatus('✅ Firmware flashed successfully!', 'success');
+                updateProgress(100);
+                addStatus('✓ Flash complete!', 'success');
                 
-                // Reset the device
+                // Reset device
                 addStatus('Resetting device...');
                 await espLoader.reset();
-                addStatus('Device reset complete. Your Water Stress Monitor is now ready!', 'success');
-                
-                // Show post-flash instructions
-                setTimeout(() => {
-                    addStatus('🎉 Installation complete! Follow the instructions below to configure WiFi.', 'success');
-                }, 1000);
+                addStatus('✓ Device reset complete!', 'success');
+                addStatus('🎉 Installation successful! Follow the instructions above to configure WiFi.', 'success');
                 
             } catch (error) {
-                addStatus(`❌ Flashing failed: ${error.message}`, 'error');
+                addStatus(`❌ Error: ${error.message}`, 'error');
                 console.error(error);
-                updateProgress(0, 'Flash failed');
+                updateProgress(0);
             } finally {
                 flashBtn.disabled = false;
-                connectBtn.disabled = false;
-                connectBtn.textContent = '🔌 Connect & Select Port';
-                // Keep progress bar visible but show completion/failure
-                setTimeout(() => {
-                    if (progressBar.style.display === 'block') {
-                        // Don't hide immediately so user can see result
-                    }
-                }, 3000);
-            }
-        });
-        
-        // Check if WebSerial is supported
-        if (!('serial' in navigator)) {
-            addStatus('❌ WebSerial is not supported in this browser. Please use Chrome or Edge on desktop.', 'error');
-            connectBtn.disabled = true;
-            deviceInfo.innerHTML = '⚠️ Browser not supported. Please use Chrome or Edge on desktop.';
-        } else {
-            addStatus('✓ WebSerial supported. Click "Connect" to begin.', 'success');
-        }
-        
-        // Handle page unload to close connection
-        window.addEventListener('beforeunload', async () => {
-            if (transport) {
-                try {
-                    await transport.disconnect();
-                } catch (e) {
-                    // Ignore errors on unload
+                flashBtn.textContent = '📡 Install Water Stress Monitor';
+                if (transport) {
+                    try {
+                        await transport.disconnect();
+                    } catch(e) {}
                 }
             }
         });
+        
+        // Check WebSerial support
+        if (!('serial' in navigator)) {
+            addStatus('❌ WebSerial not supported. Please use Chrome or Edge on desktop.', 'error');
+            flashBtn.disabled = true;
+        } else {
+            addStatus('✓ WebSerial supported. Click "Install" to begin.', 'success');
+        }
     </script>
 </body>
 </html>
